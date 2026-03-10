@@ -17,6 +17,7 @@ export const useAuthStore = defineStore('auth',{
                 this.user = response.data.user;
                 this.isAuthenticated = true;
                 localStorage.setItem('token',response.data.token);
+                console.log("ТОКЕН "+   response.data.token);
             } catch (error){
                 if (error.response){
                     this.errorMessage = error.response.data.message;
@@ -29,14 +30,13 @@ export const useAuthStore = defineStore('auth',{
                     console.log(error);
                 }
             }
-        }
-    },
+        },
         async getUser(){
             this.errorMessage = "";
             try{
-                const response = await axios.get(backendUrl + '/user',
+                const response = await axios.get('http://127.0.0.1:8000/api/user',
                     {headers: {
-                        Authorizaton: 'Bearer' + this.token
+                            Authorization: 'Bearer ' + this.token
                         }});
                 this.user = response.data;
             } catch (error){
@@ -55,10 +55,10 @@ export const useAuthStore = defineStore('auth',{
         },
         async logout(){
             try {
-                const response = await axios.get(backendUrl + '/logout',
+                const response = await axios.get('http://127.0.0.1:8000/api/logout',
                     {
                         headers:{
-                            Authorizaton: 'Bearer' + this.token
+                            Authorization: 'Bearer ' + this.token
                         }
                     });
                 this.errorCode = response.data.code;
@@ -84,4 +84,5 @@ export const useAuthStore = defineStore('auth',{
                 }
             }
         },
+    },
 });

@@ -42,8 +42,13 @@ export default {
 <template>
   <header>
     <nav>
+      <ul>
+        <li><router-link to="/">Главная</router-link></li>
+        <li><router-link to="/category">Категории товаров</router-link></li>
+        <li><router-link to="/good">Товары</router-link></li>
+      </ul>
       <div v-if="isAuthenticated && user">
-        Welcome, {{user.name}}
+        Welcome, {{user.first_name}}
         <button @click="logout">Logout</button>
       </div>
       <div v-else>
@@ -62,6 +67,7 @@ export default {
       </div>
     </nav>
   </header>
+  <router-view></router-view>
 </template>
 
 <style scoped>
