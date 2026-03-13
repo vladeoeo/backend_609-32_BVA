@@ -1,12 +1,38 @@
 <script>
 import {useAuthStore} from "@/stores/authStore.js";
+import Button from 'primevue/button';
+import Menubar from 'primevue/menubar';
+import InputText from 'primevue/inputtext';
 
 export default {
+  components: {Button, Menubar, InputText},
   data() {
     return{
+      date: "",
       email: "",
       password: "",
       authStore: useAuthStore(),
+      items:[
+        {
+          label:"Главная страница",
+          icon:"pi pi-fw pi-home",
+          route:"/",
+          shortcut:"Ctrl + H",
+          submenu:[
+
+          ],
+        },
+        {
+          label:"Категории",
+          icon:"pi pi-fw pi-folder",
+          route:"/category",
+        },
+        {
+          label:"Товары",
+          icon:"pi pi-fw pi-box",
+          route:"/good",
+        }
+      ]
     };
   },
   computed: {
@@ -40,28 +66,38 @@ export default {
 </script>
 
 <template>
-  <header>
-    <nav>
+  <Menubar :model="items">
+    <template #start>
+      <span>
+        <img src="@/assets/logo.png" width="100">
+      </span>
+    </template>
+    <template #item="{item, props,hasSubmenu,root}">
+      <a class="flex items-center ml-6 p-4">
+        <router-link v-if="item.route" :to="item.route">
+          <span :class="item.icon" />
+          <span class="ml-1">{{item.label}}</span>
+        </router-link>
+      </a>
+    </template>
+    <template #end>
       <div v-if="isAuthenticated && user">
-        Welcome, {{user.name}}
-        <button @click="logout">Logout</button>
+        <span class="pi pi-fw pi-user mr-8">{{user.first_name}}</span>
+        <Button @click="logout" class="ml-4">Выйти</Button>
       </div>
       <div v-else>
         <form @submit.prevent="login">
-          <div>
-            <label for="email">Email:</label>
-            <input v-model="email" type="email" id="email" required>
-          </div>
-          <div>
-            <label for="password">Password:</label>
-            <input v-model="password" type="password" id="password" required>
-          </div>
-          <button type="submit">Login</button>
-          <p v-if="authError" class="error">{{authError}}</p>
+          <InputText v-model="email" type="email" id="email" required placeholder="Логин" class="m-2 sm:w-auto"
+          :class="{'p-invalid':authError}"/>
+          <InputText v-model="password" type="password" id="password" required placeholder="Пароль" class="m-2 sm:w-auto"
+                     :class="{'p-invalid':authError}"/>
+          <Button type="submit">Войти</Button>
+          <div class="ml-2"><small v-if="authError" class="error">{{authError}}</small></div>
         </form>
       </div>
-    </nav>
-  </header>
+    </template>
+  </Menubar>
+  <router-view></router-view>
 </template>
 
 <style scoped>
