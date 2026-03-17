@@ -6,6 +6,7 @@ export const useGoodStore = defineStore('good',{
     state: () => ({
         goods: [],
         goods_total:null,
+        errorCode:"",
         errorMessage:"",
         loading:false,
     }),
@@ -52,6 +53,32 @@ export const useGoodStore = defineStore('good',{
                 }
             }finally{
                 this.loading = false;
+            }
+        },
+        async createGood(formData){
+            this.errorMessage = "";
+            try{
+                const response = await axios.post(backendUrl+'/good',formData,{
+                    headers:{
+                        'Content-Type':'multipart/form-data',
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    },
+                });
+                this.errorCode = response.data.code;
+                this.errorMessage = response.data.message;
+            } catch (error){
+                if(error.response){
+                    this.errorCode = 11;
+                    this.errorMessage = error.response.data.message;
+                    console.log(error);
+                } else if(error.request){
+                    this.errorMessage = error.message;
+                    this.errorCode = 12;
+                    console.log(error);
+                }else{
+                    this.errorCode = 13;
+                    console.log(error);
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ export default {
     }
   },
   computed:{
-    goods(){
+    goods() {
       return this.goodStore.goods;
     },
     goods_total(){
@@ -51,6 +51,15 @@ export default {
       :first="offset">
     <Column field="product_id" header="№"/>
     <Column field="name" header="Наименование товара"/>
+    <Column header="Изображение товара">
+      <template #body="slotProps">
+        <img :src="slotProps.data.img_url" alt="Товар" style="width:80px;"/>
+      </template>
+    </Column>
+    <template #footer>
+      <div class="text-end">
+        <Button type="button" @click="this.$router.push('/createGood')" icon="pi pi-plus" label="Добавить товар">Добавить товар</Button>
+      </div>
+    </template>
   </DataTable>
-
-</template>
+  </template>

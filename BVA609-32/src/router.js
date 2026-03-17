@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/components/Home.vue';
 import Items from '@/components/Items.vue';
 import Categories from '@/components/Categories.vue';
+import CreateCategory from "@/components/CreateGood.vue";
+import CreateGood from "@/components/CreateGood.vue";
 
 const routes = [
     {
@@ -16,6 +18,10 @@ const routes = [
         path: "/good",
         component: Items,
     },
+    {
+        path: '/createGood',
+        component: CreateGood,
+    }
 ];
 
 const router = createRouter({
